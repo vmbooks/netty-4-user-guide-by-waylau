@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Introduction - Netty 4.x 用户指南 - 开源图书(OpenBooks)</title>
+        <title>Shutting Down Your Application 关闭你的应用 - Netty 4.x 用户指南 - 开源图书(OpenBooks)</title>
         
         <meta name="description" content="">
         
@@ -16,13 +16,13 @@
 
     
             
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
                 
             
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
                 
             
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
                 
             
         
@@ -52,8 +52,8 @@
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/images/apple-touch-icon-precomposed-152.png">
     <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/images/favicon.ico" type="image/x-icon">
 
-    
-    
+    <link rel="next" href="Summary.html" />
+    <link rel="prev" href="Speaking-in-POJO-instead-of-ByteBuf.html" />
 
     </head>
     <body>
@@ -70,7 +70,7 @@
     
 
     <!-- Title -->
-    <h1><i class="fa fa-circle-o-notch fa-spin"></i><a href="." >Introduction</a></h1>
+    <h1><i class="fa fa-circle-o-notch fa-spin"></i><a href=".." >Shutting Down Your Application 关闭你的应用</a></h1>
 </div>
 
 
@@ -93,22 +93,8 @@
                                 </script>
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="netty-4x-user-guide-&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x300A;netty-4x-&#x7528;&#x6237;&#x6307;&#x5357;&#x300B;">Netty 4.x User Guide &#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#x300A;Netty 4.x &#x7528;&#x6237;&#x6307;&#x5357;&#x300B;</h1>
-<p><img src="images/netty_logo.jpg" alt=""></p>
-<p>&#x300A;Netty 4.x &#x7528;&#x6237;&#x6307;&#x5357;&#x300B;&#x4E2D;&#x6587;&#x7FFB;&#x8BD1;&#xFF08;&#x5305;&#x542B;&#x4E86;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x4EE5;&#x53CA;&#x5176;&#x4ED6;&#x6587;&#x7AE0;&#xFF09;&#x3002;&#x81F3;&#x4ECA;&#x4E3A;&#x6B62;&#xFF0C;Netty &#x7684;&#x6700;&#x65B0;&#x7248;&#x672C;&#x4E3A; 4.1.42.Final (2019-9-25)&#x5BF9;&#x6B64;&#x8FDB;&#x884C;&#x7FFB;&#x8BD1;&#xFF0C;&#x5E76;&#x5728;&#x539F;&#x6587;&#x7684;&#x57FA;&#x7840;&#x4E0A;&#xFF0C;&#x63D2;&#x5165;&#x914D;&#x56FE;&#xFF0C;&#x56FE;&#x6587;&#x5E76;&#x8302;&#x65B9;&#x4FBF;&#x7528;&#x6237;&#x7406;&#x89E3;&#x3002;</p>
-<p>&#x4F5C;&#x4E3A;&#x63D0;&#x5347;&#xFF0C;&#x4E5F;&#x63A8;&#x8350;&#x9605;&#x8BFB;&#x300A;<a href="https://github.com/waylau/essential-netty-in-action" target="_blank">Netty &#x5B9E;&#x6218;(&#x7CBE;&#x9AD3;)</a>&#x300B;&#x3002;&#x4E0E;&#x4E4B;&#x7C7B;&#x4F3C;&#x7684; NIO &#x6846;&#x67B6;&#x8FD8;&#x6709; MINA&#xFF0C;&#x53EF;&#x4EE5;&#x53C2;&#x9605;&#x300A;<a href="https://github.com/waylau/apache-mina-2.x-user-guide" target="_blank">Apache MINA 2 &#x7528;&#x6237;&#x6307;&#x5357;</a>&#x300B;&#x3002;</p>
-<h3 id="code-&#x6E90;&#x7801;">Code &#x6E90;&#x7801;</h3>
-<p>&#x4E66;&#x4E2D;&#x6240;&#x6709;&#x793A;&#x4F8B;&#x6E90;&#x7801;&#xFF0C;&#x79FB;&#x6B65;&#x81F3;<a href="https://github.com/waylau/netty-4-user-guide-demos" target="_blank">https://github.com/waylau/netty-4-user-guide-demos</a></p>
-<h3 id="issue-&#x610F;&#x89C1;&#x3001;&#x5EFA;&#x8BAE;">Issue &#x610F;&#x89C1;&#x3001;&#x5EFA;&#x8BAE;</h3>
-<p>&#x5982;&#x6709;&#x52D8;&#x8BEF;&#x3001;&#x610F;&#x89C1;&#x6216;&#x5EFA;&#x8BAE;&#x6B22;&#x8FCE;&#x62CD;&#x7816; <a href="https://github.com/waylau/netty-4-user-guide/issues" target="_blank">https://github.com/waylau/netty-4-user-guide/issues</a></p>
-<h3 id="contact-&#x8054;&#x7CFB;&#x4F5C;&#x8005;">Contact &#x8054;&#x7CFB;&#x4F5C;&#x8005;:</h3>
-<ul>
-<li>Blog: <a href="https://waylau.com" target="_blank">waylau.com</a></li>
-<li>Gmail: <a href="mailto:waylau521@gmail.com" target="_blank">waylau521(at)gmail.com</a></li>
-<li>Weibo: <a href="http://weibo.com/waylau521" target="_blank">waylau521</a></li>
-<li>Twitter: <a href="https://twitter.com/waylau521" target="_blank">waylau521</a></li>
-<li>Github : <a href="https://github.com/waylau" target="_blank">waylau</a></li>
-</ul>
+                                <h1 id="shutting-down-your-application-&#x5173;&#x95ED;&#x4F60;&#x7684;&#x5E94;&#x7528;">Shutting Down Your Application &#x5173;&#x95ED;&#x4F60;&#x7684;&#x5E94;&#x7528;</h1>
+<p>&#x5173;&#x95ED;&#x4E00;&#x4E2A; Netty &#x5E94;&#x7528;&#x5F80;&#x5F80;&#x53EA;&#x9700;&#x8981;&#x7B80;&#x5355;&#x5730;&#x901A;&#x8FC7; shutdownGracefully() &#x65B9;&#x6CD5;&#x6765;&#x5173;&#x95ED;&#x4F60;&#x6784;&#x5EFA;&#x7684;&#x6240;&#x6709;&#x7684; <a href="http://netty.io/4.0/api/io/netty/channel/EventLoopGroup.html" target="_blank">EventLoopGroup</a>&#x3002;&#x5F53;EventLoopGroup &#x88AB;&#x5B8C;&#x5168;&#x5730;&#x7EC8;&#x6B62;,&#x5E76;&#x4E14;&#x5BF9;&#x5E94;&#x7684;&#x6240;&#x6709; <a href="http://netty.io/4.0/api/io/netty/channel/Channel.html" target="_blank">channel</a> &#x90FD;&#x5DF2;&#x7ECF;&#x88AB;&#x5173;&#x95ED;&#x65F6;&#xFF0C;Netty &#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;<a href="http://netty.io/4.0/api/io/netty/util/concurrent/Future.html" target="_blank">Future</a>&#x5BF9;&#x8C61;&#x6765;&#x901A;&#x77E5;&#x4F60;&#x3002;</p>
 
                                 
                                 </section>
@@ -145,6 +131,14 @@
 
             
                 
+                <a href="Speaking-in-POJO-instead-of-ByteBuf.html" class="navigation navigation-prev " aria-label="上一页: Speaking in POJO instead of ByteBuf 用POJO代替ByteBuf">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="Summary.html" class="navigation navigation-next " aria-label="下一页: Summary 总结">
+                    <i class="fa fa-angle-right"></i>
+                </a>
                 
             
         
@@ -172,8 +166,8 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
-            <a href="./">
+        <li class="chapter " data-level="1.1" data-path="../">
+            <a href="../">
             
                     
                     Introduction
@@ -196,8 +190,8 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.2.1" data-path="Preface/The-Problem.html">
-            <a href="Preface/The-Problem.html">
+        <li class="chapter " data-level="1.2.1" data-path="../Preface/The-Problem.html">
+            <a href="../Preface/The-Problem.html">
             
                     
                     The Problem 问题
@@ -207,8 +201,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.2" data-path="Preface/The-Solution.html">
-            <a href="Preface/The-Solution.html">
+        <li class="chapter " data-level="1.2.2" data-path="../Preface/The-Solution.html">
+            <a href="../Preface/The-Solution.html">
             
                     
                     The Solution 解决
@@ -223,8 +217,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="Getting-Started/Getting-Started.html">
-            <a href="Getting-Started/Getting-Started.html">
+        <li class="chapter " data-level="1.3" data-path="Getting-Started.html">
+            <a href="Getting-Started.html">
             
                     
                     Getting Started 开始
@@ -235,8 +229,8 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.3.1" data-path="Getting-Started/Before-Getting-Started.html">
-            <a href="Getting-Started/Before-Getting-Started.html">
+        <li class="chapter " data-level="1.3.1" data-path="Before-Getting-Started.html">
+            <a href="Before-Getting-Started.html">
             
                     
                     Before Getting Started 开始之前
@@ -246,8 +240,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="Getting-Started/Writing-a-Discard-Server.html">
-            <a href="Getting-Started/Writing-a-Discard-Server.html">
+        <li class="chapter " data-level="1.3.2" data-path="Writing-a-Discard-Server.html">
+            <a href="Writing-a-Discard-Server.html">
             
                     
                     Writing a Discard Server 写个抛弃服务器
@@ -257,8 +251,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.3" data-path="Getting-Started/Looking-into-the-Received-Data.html">
-            <a href="Getting-Started/Looking-into-the-Received-Data.html">
+        <li class="chapter " data-level="1.3.3" data-path="Looking-into-the-Received-Data.html">
+            <a href="Looking-into-the-Received-Data.html">
             
                     
                     Looking into the Received Data 查看收到的数据
@@ -268,8 +262,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.4" data-path="Getting-Started/Writing-an-Echo-Server.html">
-            <a href="Getting-Started/Writing-an-Echo-Server.html">
+        <li class="chapter " data-level="1.3.4" data-path="Writing-an-Echo-Server.html">
+            <a href="Writing-an-Echo-Server.html">
             
                     
                     Writing an Echo Server 写个应答服务器
@@ -279,8 +273,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.5" data-path="Getting-Started/Writing-a-Time-Server.html">
-            <a href="Getting-Started/Writing-a-Time-Server.html">
+        <li class="chapter " data-level="1.3.5" data-path="Writing-a-Time-Server.html">
+            <a href="Writing-a-Time-Server.html">
             
                     
                     Writing a Time Server 写个时间服务器
@@ -290,8 +284,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.6" data-path="Getting-Started/Writing-a-Time-Client.html">
-            <a href="Getting-Started/Writing-a-Time-Client.html">
+        <li class="chapter " data-level="1.3.6" data-path="Writing-a-Time-Client.html">
+            <a href="Writing-a-Time-Client.html">
             
                     
                     Writing a Time Client 写个时间客户端
@@ -301,8 +295,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.7" data-path="Getting-Started/Dealing-with-a-Stream-based-Transport.html">
-            <a href="Getting-Started/Dealing-with-a-Stream-based-Transport.html">
+        <li class="chapter " data-level="1.3.7" data-path="Dealing-with-a-Stream-based-Transport.html">
+            <a href="Dealing-with-a-Stream-based-Transport.html">
             
                     
                     Dealing with a Stream-based Transport 处理一个基于流的传输
@@ -312,8 +306,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.8" data-path="Getting-Started/Speaking-in-POJO-instead-of-ByteBuf.html">
-            <a href="Getting-Started/Speaking-in-POJO-instead-of-ByteBuf.html">
+        <li class="chapter " data-level="1.3.8" data-path="Speaking-in-POJO-instead-of-ByteBuf.html">
+            <a href="Speaking-in-POJO-instead-of-ByteBuf.html">
             
                     
                     Speaking in POJO instead of ByteBuf 用POJO代替ByteBuf
@@ -323,8 +317,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.9" data-path="Getting-Started/Shutting-Down-Your-Application.html">
-            <a href="Getting-Started/Shutting-Down-Your-Application.html">
+        <li class="chapter active" data-level="1.3.9" data-path="Shutting-Down-Your-Application.html">
+            <a href="Shutting-Down-Your-Application.html">
             
                     
                     Shutting Down Your Application 关闭你的应用
@@ -334,8 +328,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.10" data-path="Getting-Started/Summary.html">
-            <a href="Getting-Started/Summary.html">
+        <li class="chapter " data-level="1.3.10" data-path="Summary.html">
+            <a href="Summary.html">
             
                     
                     Summary 总结
@@ -350,8 +344,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="Architectural-Overview/Architectural-Overview.html">
-            <a href="Architectural-Overview/Architectural-Overview.html">
+        <li class="chapter " data-level="1.4" data-path="../Architectural-Overview/Architectural-Overview.html">
+            <a href="../Architectural-Overview/Architectural-Overview.html">
             
                     
                     Architectural Overview 架构总览
@@ -362,8 +356,8 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.1" data-path="Architectural-Overview/Rich-Buffer-Data-Structure.html">
-            <a href="Architectural-Overview/Rich-Buffer-Data-Structure.html">
+        <li class="chapter " data-level="1.4.1" data-path="../Architectural-Overview/Rich-Buffer-Data-Structure.html">
+            <a href="../Architectural-Overview/Rich-Buffer-Data-Structure.html">
             
                     
                     Rich Buffer Data Structure 丰富的缓冲实现
@@ -373,8 +367,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="Architectural-Overview/Universal-Asynchronous-IO-API.html">
-            <a href="Architectural-Overview/Universal-Asynchronous-IO-API.html">
+        <li class="chapter " data-level="1.4.2" data-path="../Architectural-Overview/Universal-Asynchronous-IO-API.html">
+            <a href="../Architectural-Overview/Universal-Asynchronous-IO-API.html">
             
                     
                     Universal Asynchronous I/O API 统一的异步 I/O API
@@ -384,8 +378,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" data-path="Architectural-Overview/Event-Model-based-on-the-Interceptor-Chain-Pattern.html">
-            <a href="Architectural-Overview/Event-Model-based-on-the-Interceptor-Chain-Pattern.html">
+        <li class="chapter " data-level="1.4.3" data-path="../Architectural-Overview/Event-Model-based-on-the-Interceptor-Chain-Pattern.html">
+            <a href="../Architectural-Overview/Event-Model-based-on-the-Interceptor-Chain-Pattern.html">
             
                     
                     Event Model based on the Interceptor Chain Pattern 基于拦截链模式的事件模型
@@ -395,8 +389,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.4" data-path="Architectural-Overview/Advanced-Components-for-More-Rapid-Development.html">
-            <a href="Architectural-Overview/Advanced-Components-for-More-Rapid-Development.html">
+        <li class="chapter " data-level="1.4.4" data-path="../Architectural-Overview/Advanced-Components-for-More-Rapid-Development.html">
+            <a href="../Architectural-Overview/Advanced-Components-for-More-Rapid-Development.html">
             
                     
                     Advanced Components for More Rapid Development 适用快速开发的高级组件
@@ -406,8 +400,8 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.5" data-path="Architectural-Overview/Summary.html">
-            <a href="Architectural-Overview/Summary.html">
+        <li class="chapter " data-level="1.4.5" data-path="../Architectural-Overview/Summary.html">
+            <a href="../Architectural-Overview/Summary.html">
             
                     
                     Summary 总结
@@ -492,7 +486,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Preface 前言","level":"1.2","depth":1,"ref":"","articles":[{"title":"The Problem 问题","level":"1.2.1","depth":2,"path":"Preface/The-Problem.md","ref":"Preface/The-Problem.md","articles":[]},{"title":"The Solution 解决","level":"1.2.2","depth":2,"path":"Preface/The-Solution.md","ref":"Preface/The-Solution.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["theme-vmlite@git+https://github.com/vmlite/gitbook-plugin-theme-vmlite.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-vmlite":{"showLevel":false,"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"}},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Netty 4.x 用户指南","language":"zh-hans","gitbook":"*"},"file":{"path":"README.md","mtime":"2020-10-18T14:27:51.789Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-18T14:28:32.275Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Shutting Down Your Application 关闭你的应用","level":"1.3.9","depth":2,"next":{"title":"Summary 总结","level":"1.3.10","depth":2,"path":"Getting-Started/Summary.md","ref":"Getting-Started/Summary.md","articles":[]},"previous":{"title":"Speaking in POJO instead of ByteBuf 用POJO代替ByteBuf","level":"1.3.8","depth":2,"path":"Getting-Started/Speaking-in-POJO-instead-of-ByteBuf.md","ref":"Getting-Started/Speaking-in-POJO-instead-of-ByteBuf.md","articles":[]},"dir":"ltr"},"config":{"plugins":["theme-vmlite@git+https://github.com/vmlite/gitbook-plugin-theme-vmlite.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-vmlite":{"showLevel":false,"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"}},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Netty 4.x 用户指南","language":"zh-hans","gitbook":"*"},"file":{"path":"Getting-Started/Shutting-Down-Your-Application.md","mtime":"2020-10-18T14:27:51.785Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-18T14:28:32.275Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -501,22 +495,22 @@
     <script src="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/gitbook.js"></script>
     <script src="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/theme.js"></script>
     
-        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
         
     
-        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
         
     
-        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
         
     
-        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
         
     
-        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
         
     
-        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
         
     
 

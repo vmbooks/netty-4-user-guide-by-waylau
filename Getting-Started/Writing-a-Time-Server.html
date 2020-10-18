@@ -1,0 +1,575 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Writing a Time Server 写个时间服务器 - Netty 4.x 用户指南 - 开源图书(OpenBooks)</title>
+        
+        <meta name="description" content="">
+        
+        
+        <script data-ad-client="ca-pub-9312750344484857" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/style.css">
+
+    
+            
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/images/favicon.ico" type="image/x-icon">
+
+    <link rel="next" href="Writing-a-Time-Client.html" />
+    <link rel="prev" href="Writing-an-Echo-Server.html" />
+
+    </head>
+    <body>
+        
+<div class="book">  
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+	<a href="/" class="btn pull-left" aria-label="开源图书(OpenBooks)"><i class="fa fa-home"></i></a>
+    
+
+    <!-- Title -->
+    <h1><i class="fa fa-circle-o-notch fa-spin"></i><a href=".." >Writing a Time Server 写个时间服务器</a></h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-client="ca-pub-9312750344484857"
+                                     data-ad-slot="2669241897"
+                                     data-ad-format="auto"
+                                     data-full-width-responsive="true"></ins>
+                                <script>
+                                     (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="writing-a-time-server-&#x5199;&#x4E2A;&#x65F6;&#x95F4;&#x670D;&#x52A1;&#x5668;">Writing a Time Server &#x5199;&#x4E2A;&#x65F6;&#x95F4;&#x670D;&#x52A1;&#x5668;</h1>
+<p>&#x5728;&#x8FD9;&#x4E2A;&#x90E8;&#x5206;&#x88AB;&#x5B9E;&#x73B0;&#x7684;&#x534F;&#x8BAE;&#x662F; <a href="http://tools.ietf.org/html/rfc868" target="_blank">TIME</a> &#x534F;&#x8BAE;&#x3002;&#x548C;&#x4E4B;&#x524D;&#x7684;&#x4F8B;&#x5B50;&#x4E0D;&#x540C;&#x7684;&#x662F;&#x5728;&#x4E0D;&#x63A5;&#x53D7;&#x4EFB;&#x4F55;&#x8BF7;&#x6C42;&#x65F6;&#x4ED6;&#x4F1A;&#x53D1;&#x9001;&#x4E00;&#x4E2A;&#x542B;32&#x4F4D;&#x7684;&#x6574;&#x6570;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x5E76;&#x4E14;&#x4E00;&#x65E6;&#x6D88;&#x606F;&#x53D1;&#x9001;&#x5C31;&#x4F1A;&#x7ACB;&#x5373;&#x5173;&#x95ED;&#x8FDE;&#x63A5;&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x4F60;&#x4F1A;&#x5B66;&#x4E60;&#x5230;&#x5982;&#x4F55;&#x6784;&#x5EFA;&#x548C;&#x53D1;&#x9001;&#x4E00;&#x4E2A;&#x6D88;&#x606F;&#xFF0C;&#x7136;&#x540E;&#x5728;&#x5B8C;&#x6210;&#x65F6;&#x5173;&#x95ED;&#x8FDE;&#x63A5;&#x3002;</p>
+<p>&#x56E0;&#x4E3A;&#x6211;&#x4EEC;&#x5C06;&#x4F1A;&#x5FFD;&#x7565;&#x4EFB;&#x4F55;&#x63A5;&#x6536;&#x5230;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x800C;&#x53EA;&#x662F;&#x5728;&#x8FDE;&#x63A5;&#x88AB;&#x521B;&#x5EFA;&#x53D1;&#x9001;&#x4E00;&#x4E2A;&#x6D88;&#x606F;&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x6B21;&#x6211;&#x4EEC;&#x4E0D;&#x80FD;&#x4F7F;&#x7528; channelRead() &#x65B9;&#x6CD5;&#x4E86;&#xFF0C;&#x4EE3;&#x66FF;&#x4ED6;&#x7684;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x8986;&#x76D6; channelActive() &#x65B9;&#x6CD5;&#xFF0C;&#x4E0B;&#x9762;&#x7684;&#x5C31;&#x662F;&#x5B9E;&#x73B0;&#x7684;&#x5185;&#x5BB9;&#xFF1A;</p>
+<pre><code>public class TimeServerHandler extends ChannelInboundHandlerAdapter {
+
+    @Override
+    public void channelActive(final ChannelHandlerContext ctx) { // (1)
+        final ByteBuf time = ctx.alloc().buffer(4); // (2)
+        time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
+
+        final ChannelFuture f = ctx.writeAndFlush(time); // (3)
+        f.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) {
+                assert f == future;
+                ctx.close();
+            }
+        }); // (4)
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace();
+        ctx.close();
+    }
+}
+</code></pre><p>1.channelActive() &#x65B9;&#x6CD5;&#x5C06;&#x4F1A;&#x5728;&#x8FDE;&#x63A5;&#x88AB;&#x5EFA;&#x7ACB;&#x5E76;&#x4E14;&#x51C6;&#x5907;&#x8FDB;&#x884C;&#x901A;&#x4FE1;&#x65F6;&#x88AB;&#x8C03;&#x7528;&#x3002;&#x56E0;&#x6B64;&#x8BA9;&#x6211;&#x4EEC;&#x5728;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x91CC;&#x5B8C;&#x6210;&#x4E00;&#x4E2A;&#x4EE3;&#x8868;&#x5F53;&#x524D;&#x65F6;&#x95F4;&#x7684;32&#x4F4D;&#x6574;&#x6570;&#x6D88;&#x606F;&#x7684;&#x6784;&#x5EFA;&#x5DE5;&#x4F5C;&#x3002;</p>
+<p>2.&#x4E3A;&#x4E86;&#x53D1;&#x9001;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5206;&#x914D;&#x4E00;&#x4E2A;&#x5305;&#x542B;&#x8FD9;&#x4E2A;&#x6D88;&#x606F;&#x7684;&#x65B0;&#x7684;&#x7F13;&#x51B2;&#x3002;&#x56E0;&#x4E3A;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5199;&#x5165;&#x4E00;&#x4E2A;32&#x4F4D;&#x7684;&#x6574;&#x6570;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x81F3;&#x5C11;&#x6709;4&#x4E2A;&#x5B57;&#x8282;&#x7684; <a href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html" target="_blank">ByteBuf</a>&#x3002;&#x901A;&#x8FC7; ChannelHandlerContext.alloc() &#x5F97;&#x5230;&#x4E00;&#x4E2A;&#x5F53;&#x524D;&#x7684;<a href="http://netty.io/4.0/api/io/netty/buffer/ByteBufAllocator.html" target="_blank">ByteBufAllocator</a>&#xFF0C;&#x7136;&#x540E;&#x5206;&#x914D;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7F13;&#x51B2;&#x3002;</p>
+<p>3.&#x548C;&#x5F80;&#x5E38;&#x4E00;&#x6837;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7F16;&#x5199;&#x4E00;&#x4E2A;&#x6784;&#x5EFA;&#x597D;&#x7684;&#x6D88;&#x606F;&#x3002;&#x4F46;&#x662F;&#x7B49;&#x4E00;&#x7B49;&#xFF0C;flip &#x5728;&#x54EA;&#xFF1F;&#x96BE;&#x9053;&#x6211;&#x4EEC;&#x4F7F;&#x7528; NIO &#x53D1;&#x9001;&#x6D88;&#x606F;&#x65F6;&#x4E0D;&#x662F;&#x8C03;&#x7528; java.nio.ByteBuffer.flip() &#x5417;&#xFF1F;ByteBuf &#x4E4B;&#x6240;&#x4EE5;&#x6CA1;&#x6709;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x56E0;&#x4E3A;&#x6709;&#x4E24;&#x4E2A;&#x6307;&#x9488;&#xFF0C;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x8BFB;&#x64CD;&#x4F5C;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x5199;&#x64CD;&#x4F5C;&#x3002;&#x5F53;&#x4F60;&#x5411; ByteBuf &#x91CC;&#x5199;&#x5165;&#x6570;&#x636E;&#x7684;&#x65F6;&#x5019;&#x5199;&#x6307;&#x9488;&#x7684;&#x7D22;&#x5F15;&#x5C31;&#x4F1A;&#x589E;&#x52A0;&#xFF0C;&#x540C;&#x65F6;&#x8BFB;&#x6307;&#x9488;&#x7684;&#x7D22;&#x5F15;&#x6CA1;&#x6709;&#x53D8;&#x5316;&#x3002;&#x8BFB;&#x6307;&#x9488;&#x7D22;&#x5F15;&#x548C;&#x5199;&#x6307;&#x9488;&#x7D22;&#x5F15;&#x5206;&#x522B;&#x4EE3;&#x8868;&#x4E86;&#x6D88;&#x606F;&#x7684;&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x675F;&#x3002;</p>
+<p>&#x6BD4;&#x8F83;&#x8D77;&#x6765;&#xFF0C;NIO &#x7F13;&#x51B2;&#x5E76;&#x6CA1;&#x6709;&#x63D0;&#x4F9B;&#x4E00;&#x79CD;&#x7B80;&#x6D01;&#x7684;&#x65B9;&#x5F0F;&#x6765;&#x8BA1;&#x7B97;&#x51FA;&#x6D88;&#x606F;&#x5185;&#x5BB9;&#x7684;&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x5C3E;&#xFF0C;&#x9664;&#x975E;&#x4F60;&#x8C03;&#x7528; flip &#x65B9;&#x6CD5;&#x3002;&#x5F53;&#x4F60;&#x5FD8;&#x8BB0;&#x8C03;&#x7528; flip &#x65B9;&#x6CD5;&#x800C;&#x5F15;&#x8D77;&#x6CA1;&#x6709;&#x6570;&#x636E;&#x6216;&#x8005;&#x9519;&#x8BEF;&#x6570;&#x636E;&#x88AB;&#x53D1;&#x9001;&#x65F6;&#xFF0C;&#x4F60;&#x4F1A;&#x9677;&#x5165;&#x56F0;&#x5883;&#x3002;&#x8FD9;&#x6837;&#x7684;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x4E0D;&#x4F1A;&#x53D1;&#x751F;&#x5728; Netty &#x4E0A;&#xFF0C;&#x56E0;&#x4E3A;&#x6211;&#x4EEC;&#x5BF9;&#x4E8E;&#x4E0D;&#x540C;&#x7684;&#x64CD;&#x4F5C;&#x7C7B;&#x578B;&#x6709;&#x4E0D;&#x540C;&#x7684;&#x6307;&#x9488;&#x3002;&#x4F60;&#x4F1A;&#x53D1;&#x73B0;&#x8FD9;&#x6837;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x6CD5;&#x4F1A;&#x8BA9;&#x4F60;&#x8FC7;&#x7A0B;&#x53D8;&#x5F97;&#x66F4;&#x52A0;&#x7684;&#x5BB9;&#x6613;&#xFF0C;&#x56E0;&#x4E3A;&#x4F60;&#x5DF2;&#x7ECF;&#x4E60;&#x60EF;&#x4E00;&#x79CD;&#x6CA1;&#x6709;&#x4F7F;&#x7528; flip &#x7684;&#x65B9;&#x5F0F;&#x3002;</p>
+<p>&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x70B9;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F; ChannelHandlerContext.write() (&#x548C; writeAndFlush() )&#x65B9;&#x6CD5;&#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A; <a href="http://netty.io/4.0/api/io/netty/channel/ChannelFuture.html" target="_blank">ChannelFuture</a> &#x5BF9;&#x8C61;&#xFF0C;&#x4E00;&#x4E2A; ChannelFuture &#x4EE3;&#x8868;&#x4E86;&#x4E00;&#x4E2A;&#x8FD8;&#x6CA1;&#x6709;&#x53D1;&#x751F;&#x7684; I/O &#x64CD;&#x4F5C;&#x3002;&#x8FD9;&#x610F;&#x5473;&#x7740;&#x4EFB;&#x4F55;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;&#x64CD;&#x4F5C;&#x90FD;&#x4E0D;&#x4F1A;&#x9A6C;&#x4E0A;&#x88AB;&#x6267;&#x884C;&#xFF0C;&#x56E0;&#x4E3A;&#x5728; Netty &#x91CC;&#x6240;&#x6709;&#x7684;&#x64CD;&#x4F5C;&#x90FD;&#x662F;&#x5F02;&#x6B65;&#x7684;&#x3002;&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4E2D;&#x5728;&#x6D88;&#x606F;&#x88AB;&#x53D1;&#x9001;&#x4E4B;&#x524D;&#x53EF;&#x80FD;&#x4F1A;&#x5148;&#x5173;&#x95ED;&#x8FDE;&#x63A5;&#x3002;</p>
+<pre><code class="lang-java">
+    Channel ch = ...;
+    ch.writeAndFlush(message);
+    ch.close();
+</code></pre>
+<p>&#x56E0;&#x6B64;&#x4F60;&#x9700;&#x8981;&#x5728; write() &#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x7684; ChannelFuture &#x5B8C;&#x6210;&#x540E;&#x8C03;&#x7528; close() &#x65B9;&#x6CD5;&#xFF0C;&#x7136;&#x540E;&#x5F53;&#x4ED6;&#x7684;&#x5199;&#x64CD;&#x4F5C;&#x5DF2;&#x7ECF;&#x5B8C;&#x6210;&#x4ED6;&#x4F1A;&#x901A;&#x77E5;&#x4ED6;&#x7684;&#x76D1;&#x542C;&#x8005;&#x3002;&#x8BF7;&#x6CE8;&#x610F;,close() &#x65B9;&#x6CD5;&#x4E5F;&#x53EF;&#x80FD;&#x4E0D;&#x4F1A;&#x7ACB;&#x9A6C;&#x5173;&#x95ED;&#xFF0C;&#x4ED6;&#x4E5F;&#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;ChannelFuture&#x3002;</p>
+<p>4.&#x5F53;&#x4E00;&#x4E2A;&#x5199;&#x8BF7;&#x6C42;&#x5DF2;&#x7ECF;&#x5B8C;&#x6210;&#x662F;&#x5982;&#x4F55;&#x901A;&#x77E5;&#x5230;&#x6211;&#x4EEC;&#xFF1F;&#x8FD9;&#x4E2A;&#x53EA;&#x9700;&#x8981;&#x7B80;&#x5355;&#x5730;&#x5728;&#x8FD4;&#x56DE;&#x7684; ChannelFuture &#x4E0A;&#x589E;&#x52A0;&#x4E00;&#x4E2A;<a href="http://netty.io/4.0/api/io/netty/channel/ChannelFutureListener.html" target="_blank">ChannelFutureListener</a>&#x3002;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x6784;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x533F;&#x540D;&#x7684; ChannelFutureListener &#x7C7B;&#x7528;&#x6765;&#x5728;&#x64CD;&#x4F5C;&#x5B8C;&#x6210;&#x65F6;&#x5173;&#x95ED; Channel&#x3002;</p>
+<p>&#x6216;&#x8005;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x7B80;&#x5355;&#x7684;&#x9884;&#x5B9A;&#x4E49;&#x76D1;&#x542C;&#x5668;&#x4EE3;&#x7801;:</p>
+<pre><code>f.addListener(ChannelFutureListener.CLOSE);
+</code></pre><p>&#x4E3A;&#x4E86;&#x6D4B;&#x8BD5;&#x6211;&#x4EEC;&#x7684;time&#x670D;&#x52A1;&#x5982;&#x6211;&#x4EEC;&#x671F;&#x671B;&#x7684;&#x4E00;&#x6837;&#x5DE5;&#x4F5C;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; UNIX &#x7684; rdate &#x547D;&#x4EE4;</p>
+<pre><code>$ rdate -o &lt;port&gt; -p &lt;host&gt;
+</code></pre><p>Port &#x662F;&#x4F60;&#x5728;main()&#x51FD;&#x6570;&#x4E2D;&#x6307;&#x5B9A;&#x7684;&#x7AEF;&#x53E3;&#xFF0C;host &#x4F7F;&#x7528; localhost &#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
+
+                                
+                                </section>
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-client="ca-pub-9312750344484857"
+                                     data-ad-slot="2669241897"
+                                     data-ad-format="auto"
+                                     data-full-width-responsive="true"></ins>
+                                <script>
+                                     (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>                                
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Writing-an-Echo-Server.html" class="navigation navigation-prev " aria-label="上一页: Writing an Echo Server 写个应答服务器">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="Writing-a-Time-Client.html" class="navigation navigation-next " aria-label="下一页: Writing a Time Client 写个时间客户端">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            <a href="../">
+            
+                    
+                    Introduction
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" >
+            
+                <span>
+            
+                    
+                    Preface 前言
+            </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../Preface/The-Problem.html">
+            <a href="../Preface/The-Problem.html">
+            
+                    
+                    The Problem 问题
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../Preface/The-Solution.html">
+            <a href="../Preface/The-Solution.html">
+            
+                    
+                    The Solution 解决
+            </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="Getting-Started.html">
+            <a href="Getting-Started.html">
+            
+                    
+                    Getting Started 开始
+            </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="Before-Getting-Started.html">
+            <a href="Before-Getting-Started.html">
+            
+                    
+                    Before Getting Started 开始之前
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="Writing-a-Discard-Server.html">
+            <a href="Writing-a-Discard-Server.html">
+            
+                    
+                    Writing a Discard Server 写个抛弃服务器
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="Looking-into-the-Received-Data.html">
+            <a href="Looking-into-the-Received-Data.html">
+            
+                    
+                    Looking into the Received Data 查看收到的数据
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="Writing-an-Echo-Server.html">
+            <a href="Writing-an-Echo-Server.html">
+            
+                    
+                    Writing an Echo Server 写个应答服务器
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.5" data-path="Writing-a-Time-Server.html">
+            <a href="Writing-a-Time-Server.html">
+            
+                    
+                    Writing a Time Server 写个时间服务器
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="Writing-a-Time-Client.html">
+            <a href="Writing-a-Time-Client.html">
+            
+                    
+                    Writing a Time Client 写个时间客户端
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.7" data-path="Dealing-with-a-Stream-based-Transport.html">
+            <a href="Dealing-with-a-Stream-based-Transport.html">
+            
+                    
+                    Dealing with a Stream-based Transport 处理一个基于流的传输
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="Speaking-in-POJO-instead-of-ByteBuf.html">
+            <a href="Speaking-in-POJO-instead-of-ByteBuf.html">
+            
+                    
+                    Speaking in POJO instead of ByteBuf 用POJO代替ByteBuf
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.9" data-path="Shutting-Down-Your-Application.html">
+            <a href="Shutting-Down-Your-Application.html">
+            
+                    
+                    Shutting Down Your Application 关闭你的应用
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.10" data-path="Summary.html">
+            <a href="Summary.html">
+            
+                    
+                    Summary 总结
+            </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../Architectural-Overview/Architectural-Overview.html">
+            <a href="../Architectural-Overview/Architectural-Overview.html">
+            
+                    
+                    Architectural Overview 架构总览
+            </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../Architectural-Overview/Rich-Buffer-Data-Structure.html">
+            <a href="../Architectural-Overview/Rich-Buffer-Data-Structure.html">
+            
+                    
+                    Rich Buffer Data Structure 丰富的缓冲实现
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../Architectural-Overview/Universal-Asynchronous-IO-API.html">
+            <a href="../Architectural-Overview/Universal-Asynchronous-IO-API.html">
+            
+                    
+                    Universal Asynchronous I/O API 统一的异步 I/O API
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../Architectural-Overview/Event-Model-based-on-the-Interceptor-Chain-Pattern.html">
+            <a href="../Architectural-Overview/Event-Model-based-on-the-Interceptor-Chain-Pattern.html">
+            
+                    
+                    Event Model based on the Interceptor Chain Pattern 基于拦截链模式的事件模型
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../Architectural-Overview/Advanced-Components-for-More-Rapid-Development.html">
+            <a href="../Architectural-Overview/Advanced-Components-for-More-Rapid-Development.html">
+            
+                    
+                    Advanced Components for More Rapid Development 适用快速开发的高级组件
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../Architectural-Overview/Summary.html">
+            <a href="../Architectural-Overview/Summary.html">
+            
+                    
+                    Summary 总结
+            </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" >
+            
+                <span>
+            
+                    
+                    Others 其他
+            </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" >
+            <a target="_blank" href="https://waylau.com/netty-chat/">
+            
+                    
+                    Netty 实现聊天功能
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" >
+            <a target="_blank" href="https://waylau.com/netty-websocket-chat/">
+            
+                    
+                    Netty 实现 WebSocket 聊天功能
+            </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" >
+            <a target="_blank" href="https://waylau.com/netty-time-out-and-heartbeat/">
+            
+                    
+                    Netty 超时机制及心跳程序实现
+            </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://book.comptechs.cn" target="_blank" class="gitbook-link"><strong>开源图书(OpenBooks)</strong></a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Writing a Time Server 写个时间服务器","level":"1.3.5","depth":2,"next":{"title":"Writing a Time Client 写个时间客户端","level":"1.3.6","depth":2,"path":"Getting-Started/Writing-a-Time-Client.md","ref":"Getting-Started/Writing-a-Time-Client.md","articles":[]},"previous":{"title":"Writing an Echo Server 写个应答服务器","level":"1.3.4","depth":2,"path":"Getting-Started/Writing-an-Echo-Server.md","ref":"Getting-Started/Writing-an-Echo-Server.md","articles":[]},"dir":"ltr"},"config":{"plugins":["theme-vmlite@git+https://github.com/vmlite/gitbook-plugin-theme-vmlite.git"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-vmlite":{"showLevel":false,"styles":{"ebook":"styles/ebook.css","epub":"styles/epub.css","mobi":"styles/mobi.css","pdf":"styles/pdf.css","print":"styles/print.css","website":"styles/website.css"}},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Netty 4.x 用户指南","language":"zh-hans","gitbook":"*"},"file":{"path":"Getting-Started/Writing-a-Time-Server.md","mtime":"2020-10-18T14:27:51.789Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-18T14:28:32.275Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/gitbook.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/gitbook-plugin-theme-default@1.0.7/_assets/website/theme.js"></script>
+    
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-152683495-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-152683495-1'); 
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?b6193f769a96b5f12f441649fc8d4e49";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+    </body>
+</html>
+
